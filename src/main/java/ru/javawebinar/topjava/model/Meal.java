@@ -9,16 +9,47 @@ import java.time.LocalTime;
  * 11.01.2015.
  */
 public class Meal {
-    private final LocalDateTime dateTime;
+    private long id;
 
-    private final String description;
+    private LocalDateTime dateTime;
 
-    private final int calories;
+    private String description;
+
+    private int calories;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
+        this.id = 0;
+    }
+
+    public Meal(long id, LocalDateTime dateTime, String description, int calories) {
+        this.dateTime = dateTime;
+        this.description = description;
+        this.calories = calories;
+        this.id = id;
+    }
+
+    public Meal() {
+    }
+
+    public Meal(long id, Meal meal) {
+        this(id, meal.getDateTime(), meal.getDescription(), meal.getCalories());
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "id=" + id +
+                ", dateTime=" + dateTime +
+                ", description='" + description + '\'' +
+                ", calories=" + calories +
+                '}';
     }
 
     public LocalDateTime getDateTime() {
