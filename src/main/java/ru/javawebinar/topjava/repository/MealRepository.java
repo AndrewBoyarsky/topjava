@@ -23,5 +23,5 @@ public interface MealRepository {
     List<Meal> getAll(int userId);
 
     // ORDERED dateTime
-    List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
+    List getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
 }

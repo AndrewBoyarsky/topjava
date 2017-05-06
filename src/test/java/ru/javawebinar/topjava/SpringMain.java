@@ -18,7 +18,7 @@ import java.util.List;
 
 public class SpringMain {
     public static void main(String[] args) {
-        ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-db.xml", "spring/spring-app.xml");
         System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
 
 //        UserRepository userRepository = (UserRepository) appCtx.getBean("mockUserRepository");
@@ -26,17 +26,17 @@ public class SpringMain {
         userRepository.getAll();
 
         UserService userService = appCtx.getBean(UserService.class);
-        userService.save(new User(null, "userName", "email", "password", Role.ROLE_ADMIN));
+        userService.save(new User(null, "userName", "email12", "password", Role.ROLE_ADMIN));
 
         appCtx.close();
         // java 7 Automatic resource management
-        try (ConfigurableApplicationContext appCtx2 = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
-            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-            adminUserController.create(new User(null, "userName", "email", "password", Role.ROLE_ADMIN));
+        try (ConfigurableApplicationContext appCtx2 = new ClassPathXmlApplicationContext("spring/spring-db.xml", "spring/spring-app.xml")) {
+            System.out.println("Bean definition names: " + Arrays.toString(appCtx2.getBeanDefinitionNames()));
+            AdminRestController adminUserController = appCtx2.getBean(AdminRestController.class);
+            adminUserController.create(new User(null, "userNam2e", "email53", "passwor2d", Role.ROLE_ADMIN));
             System.out.println();
 
-            MealRestController mealController = appCtx.getBean(MealRestController.class);
+            MealRestController mealController = appCtx2.getBean(MealRestController.class);
             List<MealWithExceed> filteredMealsWithExceeded =
                     mealController.getBetween(
                             LocalDate.of(2015, Month.MAY, 30), LocalTime.of(7, 0),

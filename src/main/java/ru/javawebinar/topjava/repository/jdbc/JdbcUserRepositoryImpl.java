@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,11 +27,12 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     private final SimpleJdbcInsert insertUser;
 
     @Autowired
-    public JdbcUserRepositoryImpl(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public JdbcUserRepositoryImpl(@Qualifier(value = "dataSource") DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate
+            namedParameterJdbcTemplate) {
         this.insertUser = new SimpleJdbcInsert(dataSource)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("id");
-        
+
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
