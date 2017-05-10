@@ -1,7 +1,12 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,15 +15,39 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
+@NamedQueries({@NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m where m.id =:id AND m.user.id = :user_id"),
+                @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m where m.id =:id AND m.user.id = :user_id"),
+                @NamedQuery(name = Meal.GET_ALL, query = "SELECT m FROM Meal m where m.user.id = :user_id  ORDER BY m.dateTime DESC"),
+                @NamedQuery(name = Meal.BETWEEN_DATE_TIME, query = "SELECT m FROM Meal m where m.user.id =:user_id AND m.dateTime BETWEEN " +
+                        ":start_date AND " +
+                        ":end_date ORDER BY m.dateTime DESC"),
+
+})
+@Entity
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"date_time", "user_id"}, name = "unique_date_time_user_idx")})
 public class Meal extends BaseEntity {
+    public static final String DELETE = "Meal.delete";
+    public static final String GET = "Meal.get";
+    public static final String GET_ALL = "Meal.getAll";
+    public static final String BETWEEN_DATE_TIME = "Meal.getBetweenDateTime";
+    @NotEmpty
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
+    @NotBlank
+    @Size(min = 5, max = 25)
+    @Column(name = "description", nullable = false)
     private String description;
 
+    @NotNull
+    @Range(min = 1, max = 10000)
+    @Column(name = "calories", nullable = false)
     private int calories;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
+
 
     public Meal() {
     }
@@ -38,12 +67,24 @@ public class Meal extends BaseEntity {
         return dateTime;
     }
 
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getCalories() {
         return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
     }
 
     public LocalDate getDate() {
@@ -52,18 +93,6 @@ public class Meal extends BaseEntity {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setCalories(int calories) {
-        this.calories = calories;
     }
 
     public User getUser() {
