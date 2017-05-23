@@ -2,16 +2,9 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
-import ru.javawebinar.topjava.Profiles;
+import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -22,20 +15,7 @@ import java.util.Collections;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles(Profiles.ACTIVE_DB)
-public class UserServiceTest {
-
-    static {
-        // Only for postgres driver logging
-        // It uses java.util.logging and logged via jul-to-slf4j bridge
-        SLF4JBridgeHandler.install();
-    }
+public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
     private UserService service;
@@ -46,6 +26,7 @@ public class UserServiceTest {
     }
         
     @Test
+    @Override
     public void testSave() throws Exception {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, Collections.singleton(Role.ROLE_USER));
         User created = service.save(newUser);
@@ -59,6 +40,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Override
     public void testDelete() throws Exception {
         service.delete(USER_ID);
         MATCHER.assertCollectionEquals(Collections.singletonList(ADMIN), service.getAll());
@@ -70,6 +52,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Override
     public void testGet() throws Exception {
         User user = service.get(USER_ID);
         MATCHER.assertEquals(USER, user);
@@ -87,12 +70,20 @@ public class UserServiceTest {
     }
 
     @Test
+    @Override
     public void testGetAll() throws Exception {
         Collection<User> all = service.getAll();
         MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, USER), all);
     }
 
     @Test
+    public void testGetWithMeals() {
+        User user = service.getWithMeals(ADMIN_ID);
+        MealTestData.MATCHER.assertCollectionEquals(Arrays.asList(MealTestData.ADMIN_MEAL1, MealTestData.ADMIN_MEAL2), user.getMeals());
+
+    }
+    @Test
+    @Override
     public void testUpdate() throws Exception {
         User updated = new User(USER);
         updated.setName("UpdatedName");

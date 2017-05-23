@@ -7,6 +7,9 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.List;
 
 public interface UserService {
+    default User getWithMeals(int id) {
+        return get(id);
+    }
 
     User save(User user);
 
