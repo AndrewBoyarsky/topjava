@@ -5,6 +5,6 @@ target
 log
 *.[oa]
 *~
-*.patch
+patch/*
 
 
