@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.AuthorizedUser;
 
 import static org.hamcrest.Matchers.*;
@@ -15,6 +16,7 @@ import static ru.javawebinar.topjava.util.MealsUtil.getWithExceeded;
 public class RootControllerTest extends AbstractControllerTest {
 
     @Test
+    @Transactional
     public void testUsers() throws Exception {
         mockMvc.perform(get("/users"))
                 .andDo(print())

@@ -85,16 +85,44 @@ public class MealRestControllerTest extends AbstractControllerTest {
         LocalDateTime startDateTime = LocalDateTime.of(2015, Month.MAY, 30, 10, 0);
         LocalDateTime endDateTime = LocalDateTime.of(2015, Month.MAY, 31, 18, 0);
         mockMvc.perform(post("/rest/meals/filter")
-                .param("startDateTime", startDateTime.toString())
-                .param("endDateTime", endDateTime.toString()))
+                .param("startDate", startDateTime.toLocalDate().toString())
+                .param("startTime", startDateTime.toLocalTime().toString())
+                .param("endDate", endDateTime.toLocalDate().toString())
+                .param("endTime", endDateTime.toLocalTime().toString()))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(MATCHER_WITH_EXCEED.contentListMatcher(MealsUtil
-                        .getFilteredWithExceeded(MEALS, startDateTime.toLocalTime(), endDateTime.toLocalTime(), AuthorizedUser.getCaloriesPerDay())
-                        .stream()
-                        .filter(m -> DateTimeUtil.isBetween(m.getDateTime().toLocalDate(), startDateTime.toLocalDate(), endDateTime.toLocalDate()))
-                        .collect(Collectors.toList())));
+                        .getFilteredWithExceeded(MEALS.stream().filter(m -> DateTimeUtil.isBetween(m.getDateTime().toLocalDate(), startDateTime.toLocalDate(), endDateTime.toLocalDate()))
+                                .collect(Collectors.toList()), startDateTime.toLocalTime(), endDateTime.toLocalTime(), AuthorizedUser
+                                .getCaloriesPerDay())));
+
+        mockMvc.perform(post("/rest/meals/filter")
+                .param("startTime", startDateTime.toLocalTime().toString())
+                .param("endTime", endDateTime.toLocalTime().toString()))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(MATCHER_WITH_EXCEED.contentListMatcher(MealsUtil
+                        .getFilteredWithExceeded(MEALS, startDateTime.toLocalTime(), endDateTime.toLocalTime(), AuthorizedUser
+                                .getCaloriesPerDay())));
+        mockMvc.perform(post("/rest/meals/filter")
+                .param("startDate", startDateTime.toLocalDate().toString())
+                .param("endDate", endDateTime.toLocalDate().toString()))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(MATCHER_WITH_EXCEED.contentListMatcher(MealsUtil
+                        .getWithExceeded(MEALS.stream().filter(m -> DateTimeUtil.isBetween(m.getDateTime().toLocalDate(), startDateTime.toLocalDate(), endDateTime.toLocalDate()))
+                                .collect(Collectors.toList()), AuthorizedUser.getCaloriesPerDay())));
+
+        mockMvc.perform(post("/rest/meals/filter"))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(MATCHER_WITH_EXCEED.contentListMatcher(MealsUtil
+                        .getWithExceeded(MEALS, AuthorizedUser.getCaloriesPerDay())));
+
     }
 
     @Test
