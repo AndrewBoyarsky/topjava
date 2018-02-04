@@ -18,7 +18,7 @@ public class AdminRestController extends AbstractUserController {
 
     @Autowired
     public AdminRestController(UserService service) {
-        super(service);
+         super(service);
     }
 
     @Override
