@@ -1,9 +1,5 @@
 function makeEditable() {
-    $('.delete').click(function () {
-        deleteRow($(this).attr("id"));
-    });
-
-    $('#detailsForm').submit(function () {
+    $('#newDataForm').submit(function () {
         save();
         return false;
     });
@@ -15,7 +11,7 @@ function makeEditable() {
 
 function add() {
     $('#id').val(null);
-    $('#editRow').modal();
+    $('#modal').modal();
 }
 
 function deleteRow(id) {
@@ -39,19 +35,7 @@ function updateTable() {
     });
 }
 
-function save() {
-    var form = $('#detailsForm');
-    $.ajax({
-        type: "POST",
-        url: ajaxUrl,
-        data: form.serialize(),
-        success: function () {
-            $('#editRow').modal('hide');
-            updateTable();
-            successNoty('Saved');
-        }
-    });
-}
+
 
 var failedNote;
 

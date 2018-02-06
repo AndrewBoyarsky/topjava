@@ -40,3 +40,27 @@ $(function () {
     });
     makeEditable();
 });
+
+function updateStatus(id) {
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + id,
+        success: function () {
+            updateTable();
+            successNoty('Changed status');
+        }
+    })
+}
+function save() {
+    var form = $('#newDataForm');
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl,
+        data: form.serialize(),
+        success: function () {
+            $('#modal').modal('hide');
+            updateTable();
+            successNoty('Saved');
+        }
+    });
+}
