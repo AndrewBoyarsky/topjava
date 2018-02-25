@@ -15,13 +15,54 @@ function clearFilter() {
     $.get(ajaxUrl, updateTableByData);
 }
 
+
+function showDateTimePicker(dateTimeInput) {
+    $(dateTimeInput).datetimepicker({
+        format: 'Y-m-d H:i:s',
+        lang: 'ru'
+    });
+    $(dateTimeInput).datetimepicker("show");
+
+}
+
+function datePicker(dateInput) {
+    $(dateInput).datetimepicker({
+        format: 'Y-m-d',
+        timepicker: false,
+        lang: 'ru'
+    });
+    $(dateInput).datetimepicker("show");
+
+}
+
+function timePicker(timeInput) {
+    $(timeInput).datetimepicker({
+        format: 'H:i',
+        datepicker: false,
+        lang: 'ru'
+    });
+    $(timeInput).datetimepicker("show");
+
+}
+
 $(function () {
+
     datatableApi = $("#datatable").DataTable({
+        "ajax": {
+            "url": ajaxUrl,
+            "dataSrc": ""
+        },
         "paging": false,
         "info": true,
         "columns": [
             {
-                "data": "dateTime"
+                "data": "dateTime",
+                "render": function (date, type, row) {
+                    if (type === "display") {
+                        return date.substr(0, 16).replace("T", " ");
+                    }
+                    return date;
+                }
             },
             {
                 "data": "description"
@@ -31,11 +72,13 @@ $(function () {
             },
             {
                 "defaultContent": "Edit",
-                "orderable": false
+                "orderable": false,
+                "render": renderEditBtn
             },
             {
                 "defaultContent": "Delete",
-                "orderable": false
+                "orderable": false,
+                "render": renderDeleteBtn
             }
         ],
         "order": [
@@ -43,7 +86,15 @@ $(function () {
                 0,
                 "desc"
             ]
-        ]
+        ],
+        "createdRow": function (row, data, dataIndex) {
+            if (data.exceed) {
+                $(row).addClass("exceeded");
+            } else {
+                $(row).addClass("normal");
+            }
+        },
+        "initComplete": makeEditable
     });
     makeEditable();
 });
