@@ -3,6 +3,7 @@ Java Enterprise Online Project
 <a href="https://www.codacy.com/app/AndrewBoyarsky/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AndrewBoyarsky/topjava&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/9291e71dea7844b4a7277c023e9dac3f"/></a>
 <a href='https://dependencyci.com/github/AndrewBoyarsky/topjava'><img src='https://dependencyci.com/github/AndrewBoyarsky/topjava/badge' alt='Dependency Status'/></a>
 ![topjava_structure](https://user-images.githubusercontent.com/13649199/27433714-8294e6fe-575e-11e7-9c41-7f6e16c5ebe5.jpg)
+<br>
 Наиболее востребованные технологии /инструменты / фреймворки Java Enterprise:
 Maven/ Spring/ Security/ JPA(Hibernate)/ REST(Jackson)/ Bootstrap(CSS)/ jQuery + plugins.
 
