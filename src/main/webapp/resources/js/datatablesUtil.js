@@ -44,6 +44,9 @@ function updateRow(id) {
     $('#modalTitle').html(i18n["editTitle"]);
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
+            if (key === "roles") {
+                $("#roles").val(value).trigger("chosen:updated");
+            }
             form.find("input[name='" + key + "']").val(value);
         });
         $('#editRow').modal();

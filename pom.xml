@@ -45,6 +45,8 @@
         <webjars-datetimepicker.version>2.5.4</webjars-datetimepicker.version>
         <webjars-noty.version>2.4.1</webjars-noty.version>
         <webjars-datatables.version>1.10.15</webjars-datatables.version>
+        <webjars-chosen.version>1.8.3</webjars-chosen.version>
+        <webjars-bootstrap-chosen.version>1.1.0</webjars-bootstrap-chosen.version>
     </properties>
 
     <build>
@@ -309,6 +311,16 @@
             <groupId>org.webjars.bower</groupId>
             <artifactId>noty</artifactId>
             <version>${webjars-noty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>chosen</artifactId>
+            <version>${webjars-chosen.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>chosen-bootstrap</artifactId>
+            <version>${webjars-bootstrap-chosen.version}</version>
         </dependency>
 
         <!--JSON-->

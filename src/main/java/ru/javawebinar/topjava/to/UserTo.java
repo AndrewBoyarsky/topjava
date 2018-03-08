@@ -1,14 +1,14 @@
 package ru.javawebinar.topjava.to;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
-import org.hibernate.validator.constraints.SafeHtml;
+import org.hibernate.validator.constraints.*;
+import ru.javawebinar.topjava.View;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.util.UserUtil;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Set;
 
 public class UserTo extends BaseTo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -30,7 +30,20 @@ public class UserTo extends BaseTo implements Serializable {
     @NotNull
     private Integer caloriesPerDay = UserUtil.DEFAULT_CALORIES_PER_DAY;
 
+    @Valid
+    @NotEmpty(groups = View.ValidatedUserRoles.class)
+    private Set<Role> roles;
+
     public UserTo() {
+    }
+
+    public UserTo(Integer id, String name, String email, String password, int caloriesPerDay, Set<Role> roles) {
+        super(id);
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.caloriesPerDay = caloriesPerDay;
+        this.roles = roles;
     }
 
     public UserTo(Integer id, String name, String email, String password, int caloriesPerDay) {
@@ -39,6 +52,14 @@ public class UserTo extends BaseTo implements Serializable {
         this.email = email;
         this.password = password;
         this.caloriesPerDay = caloriesPerDay;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getPassword() {
@@ -65,12 +86,12 @@ public class UserTo extends BaseTo implements Serializable {
         this.email = email;
     }
 
-    public void setCaloriesPerDay(Integer caloriesPerDay) {
-        this.caloriesPerDay = caloriesPerDay;
-    }
-
     public Integer getCaloriesPerDay() {
         return caloriesPerDay;
+    }
+
+    public void setCaloriesPerDay(Integer caloriesPerDay) {
+        this.caloriesPerDay = caloriesPerDay;
     }
 
     @Override

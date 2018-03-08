@@ -35,3 +35,6 @@
 .glyphicon {
     cursor: pointer;
 }
+.search-field {
+    padding-left:6px !important;
+}

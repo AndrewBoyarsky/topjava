@@ -61,6 +61,17 @@
                             <input type="email" class="form-control" id="email" name="email" placeholder="<spring:message code="user.email"/>">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="roles" class="control-label col-xs-3"><spring:message code="user.roles"/></label>
+                        <div class="col-xs-9">
+                            <select class="form-control" multiple id="roles"
+                                    name="roles"
+                                    data-placeholder="<spring:message code="user.roles"/>">
+                                <option value="ROLE_USER">USER</option>
+                                <option value="ROLE_ADMIN">ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label for="password" class="control-label col-xs-3"><spring:message code="user.password"/></label>
