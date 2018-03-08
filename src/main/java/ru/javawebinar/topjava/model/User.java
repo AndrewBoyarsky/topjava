@@ -25,30 +25,24 @@ import static ru.javawebinar.topjava.util.UserUtil.DEFAULT_CALORIES_PER_DAY;
 public class User extends NamedEntity {
 
 //    public static final String GRAPH_WITH_MEALS = "User.withMeals";
-
     public static final String DELETE = "User.delete";
     public static final String BY_EMAIL = "User.getByEmail";
     public static final String ALL_SORTED = "User.getAllSorted";
-
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
     @SafeHtml
     private String email;
-
     @Column(name = "password", nullable = false)
     @NotBlank
     @Length(min = 5)
     @JsonView(View.JsonREST.class)
     @SafeHtml
     private String password;
-
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private boolean enabled = true;
-
     @Column(name = "registered", columnDefinition = "timestamp default now()")
     private Date registered = new Date();
-
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -57,21 +51,22 @@ public class User extends NamedEntity {
 //    @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size = 200)
     private Set<Role> roles;
-
     @Column(name = "calories_per_day", columnDefinition = "int default 2000")
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("dateTime DESC")
 //    @JsonIgnore
     protected List<Meal> meals;
-
     public User() {
     }
 
     public User(User u) {
         this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getCaloriesPerDay(), u.isEnabled(), u.getRegistered(), u.getRoles());
+    }
+
+    public User(Integer id, String name, String email, String password, int caloriesPerDay, Collection<Role> roles) {
+        this(id, name, email, password, caloriesPerDay, true, new Date(), roles);
     }
 
     public User(Integer id, String name, String email, String password, int caloriesPerDay, Role role, Role... roles) {
@@ -96,20 +91,12 @@ public class User extends NamedEntity {
         this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Date getRegistered() {
         return registered;
     }
 
     public void setRegistered(Date registered) {
         this.registered = registered;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public int getCaloriesPerDay() {
@@ -124,20 +111,26 @@ public class User extends NamedEntity {
         return enabled;
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? Collections.emptySet() : EnumSet.copyOf(roles);
     }
 
     public String getPassword() {
         return password;
     }
-
+    public void setPassword(String password) {
+        this.password = password;
+    }
     public List<Meal> getMeals() {
         return meals;
-    }
-
-    public void setRoles(Collection<Role> roles) {
-        this.roles = CollectionUtils.isEmpty(roles) ? Collections.emptySet() : EnumSet.copyOf(roles);
     }
 
     @Override

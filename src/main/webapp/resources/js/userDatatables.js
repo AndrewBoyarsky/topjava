@@ -20,7 +20,14 @@ function enable(chkbox, id) {
         }
     });
 }
-
+function multiSelect() {
+    $("#roles").chosen({
+        // disable_search: true,
+        width: "100%",
+        hide_results_on_select: false,
+        disable_search_threshold : $("#roles option").length
+    });
+}
 // $(document).ready(function () {
 $(function () {
     datatableApi = $('#datatable').DataTable(extendsOpts({
@@ -81,4 +88,5 @@ $(function () {
             }
         }
     }));
+    multiSelect();
 });
