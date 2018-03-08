@@ -16,6 +16,7 @@ before_script:
 branches:
   only:
   - master
+  - develop
 
 #https://docs.travis-ci.com/user/environment-variables#Default-Environment-Variables
 env:
