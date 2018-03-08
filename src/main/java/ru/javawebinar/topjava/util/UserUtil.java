@@ -1,14 +1,17 @@
 package ru.javawebinar.topjava.util;
 
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
+
+import java.util.EnumSet;
 
 public class UserUtil {
 
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
 
     public static User createNewFromTo(UserTo newUser) {
-        return new User(null, newUser.getName(), newUser.getEmail().toLowerCase(), newUser.getPassword(), newUser.getCaloriesPerDay(), newUser.getRoles());
+        return new User(null, newUser.getName(), newUser.getEmail().toLowerCase(), newUser.getPassword(), newUser.getCaloriesPerDay(), (newUser.getRoles() == null) ? EnumSet.of(Role.ROLE_USER) : newUser.getRoles());
     }
 
     public static UserTo asTo(User user) {
@@ -20,7 +23,9 @@ public class UserUtil {
         user.setEmail(userTo.getEmail().toLowerCase());
         user.setCaloriesPerDay(userTo.getCaloriesPerDay());
         user.setPassword(userTo.getPassword());
-        user.setRoles(userTo.getRoles());
+        if (userTo.getRoles() != null) {
+            user.setRoles(userTo.getRoles());
+        }
         return user;
     }
 

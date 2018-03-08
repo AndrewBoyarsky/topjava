@@ -1,13 +1,13 @@
 package ru.javawebinar.topjava.to;
 
 import org.hibernate.validator.constraints.*;
+import ru.javawebinar.topjava.View;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.util.UserUtil;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.EnumSet;
 import java.util.Set;
 
 public class UserTo extends BaseTo implements Serializable {
@@ -31,7 +31,7 @@ public class UserTo extends BaseTo implements Serializable {
     private Integer caloriesPerDay = UserUtil.DEFAULT_CALORIES_PER_DAY;
 
     @Valid
-    @NotEmpty
+    @NotEmpty(groups = View.ValidatedUserRoles.class)
     private Set<Role> roles;
 
     public UserTo() {
@@ -52,7 +52,6 @@ public class UserTo extends BaseTo implements Serializable {
         this.email = email;
         this.password = password;
         this.caloriesPerDay = caloriesPerDay;
-        this.roles = EnumSet.of(Role.ROLE_USER);
     }
 
     public Set<Role> getRoles() {
