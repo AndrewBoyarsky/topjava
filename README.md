@@ -1,4 +1,4 @@
-Java Enterprise Online Project 
+Java Enterprise Online Project <a href="https://calories-management-app.herokuapp.com/">Демо</a>
 ===============================
 <a href="https://www.codacy.com/app/AndrewBoyarsky/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AndrewBoyarsky/topjava&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/9291e71dea7844b4a7277c023e9dac3f"/></a>
 <a href='https://dependencyci.com/github/AndrewBoyarsky/topjava'><img src='https://dependencyci.com/github/AndrewBoyarsky/topjava/badge' alt='Dependency Status'/></a>
