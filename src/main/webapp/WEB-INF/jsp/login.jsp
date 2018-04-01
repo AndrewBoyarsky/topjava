@@ -49,20 +49,13 @@
 			<c:when test="${not empty param.error}">
 				<div class="error">
 					<spring:message code="${param.error}"/>
+					<c:if test="${param.error eq 'user.token.expired'}">
+						<a href="resendToken"> <spring:message code="app.resend.text"/></a>
+					</c:if>
 				</div>
-			</c:when>
-			<c:when test="${not empty param.error}">
-				<div class="error">
-					<spring:message code="${param.error}"/>
-				</div>
-			
 			</c:when>
 		
 		</c:choose>
-		<c:if test="${param.error eq 'user.token.expired'}">
-			<a href="resendToken"><spring:message code="app.resend.text"/></a>
-		</c:if>
-		
 		
 		<c:if test="${not empty param.message}">
 			<div class="message">
