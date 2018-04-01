@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.model.VerificationToken;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.repository.VerificationTokenRepository;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -23,49 +25,50 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
-
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
+    public UserServiceImpl(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository) {
+        this.userRepository = userRepository;
+        this.verificationTokenRepository = verificationTokenRepository;
     }
 
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public User save(User user) {
         Assert.notNull(user, "user must not be null");
-        return repository.save(prepareToSave(user));
+        return userRepository.save(prepareToSave(user));
     }
 
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+        checkNotFoundWithId(userRepository.delete(id), id);
     }
 
     @Override
     public User get(int id) throws NotFoundException {
-        return checkNotFoundWithId(repository.get(id), id);
+        return checkNotFoundWithId(userRepository.get(id), id);
     }
 
     @Override
     public User getByEmail(String email) throws NotFoundException {
         Assert.notNull(email, "email must not be null");
-        return checkNotFound(repository.getByEmail(email), "email=" + email);
+        return checkNotFound(userRepository.getByEmail(email), "email=" + email);
     }
 
     @Cacheable("users")
     @Override
     public List<User> getAll() {
-        return repository.getAll();
+        return userRepository.getAll();
     }
 
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
-        repository.save(prepareToSave(user));
+        userRepository.save(prepareToSave(user));
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -73,7 +76,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void update(UserTo userTo) {
         User user = updateFromTo(get(userTo.getId()), userTo);
-        repository.save(prepareToSave(user));
+        userRepository.save(prepareToSave(user));
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -88,12 +91,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void enable(int id, boolean enabled) {
         User user = get(id);
         user.setEnabled(enabled);
-        repository.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
-        User u = repository.getByEmail(email.toLowerCase());
+        User u = userRepository.getByEmail(email.toLowerCase());
         if (u == null) {
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
@@ -102,6 +105,45 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getWithMeals(int id) {
-        return checkNotFoundWithId(repository.getWithMeals(id), id);
+        return checkNotFoundWithId(userRepository.getWithMeals(id), id);
+    }
+
+    @Override
+    public VerificationToken createVerificationToken(String token, int userId) {
+        Assert.hasText(token, "token must not be empty");
+        return verificationTokenRepository.save(new VerificationToken(token), userId);
+    }
+
+    @Override
+    public VerificationToken getVerificationToken(String token) throws NotFoundException {
+        Assert.hasText(token, "token must not be empty");
+        return checkNotFound(verificationTokenRepository.getByToken(token), "token isnt exist");
+    }
+
+    @Override
+    public User getByVerificationToken(String token) throws NotFoundException {
+        Assert.hasText(token, "token must not be empty");
+        return getVerificationToken(token).getUser();
+    }
+
+    @Override
+    public void deleteVerificationToken(int id) {
+        checkNotFound(verificationTokenRepository.delete(id), " token is not exist");
+    }
+
+    @Override
+    public List<VerificationToken> getAllVerificationTokens() {
+        return verificationTokenRepository.getAll();
+    }
+
+    @Override
+    public VerificationToken saveVerificationToken(VerificationToken verificationToken, int userId) {
+        Assert.notNull(verificationToken, " verification token must not be null");
+        return verificationTokenRepository.save(verificationToken,userId );
+    }
+
+    @Override
+    public void deleteAllExpiredVerificationTokens() {
+        verificationTokenRepository.deleteAllExpired();
     }
 }

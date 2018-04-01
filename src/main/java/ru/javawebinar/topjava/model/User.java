@@ -41,6 +41,17 @@ public class User extends NamedEntity {
     private String password;
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private boolean enabled = true;
+    @Column(name = "email_confirmed", nullable = false, columnDefinition = "bool default false")
+    private boolean emailConfirmed = false;
+
+    public boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
+    }
+
     @Column(name = "registered", columnDefinition = "timestamp default now()")
     private Date registered = new Date();
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

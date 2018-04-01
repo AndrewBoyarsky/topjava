@@ -7,6 +7,6 @@ public class AllActiveProfileResolver implements ActiveProfilesResolver {
 
     @Override
     public String[] resolve(Class<?> aClass) {
-        return new String[]{Profiles.REPOSITORY_IMPLEMENTATION, Profiles.getActiveDbProfile()};
+        return new String[]{Profiles.REPOSITORY_IMPLEMENTATION, Profiles.getActiveDbProfile(), Profiles.EMAIL_IMPLEMENTATION};
     }
 }

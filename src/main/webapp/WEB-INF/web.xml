@@ -6,8 +6,8 @@
     <display-name>Topjava</display-name>
 
     <context-param>
-        <param-name>spring.profiles.default</param-name>
-        <param-value>postgres,datajpa</param-value>
+        <param-name>spring.profiles.active</param-name>
+        <param-value>postgres,datajpa,sendgrid</param-value>
     </context-param>
 
     <context-param>

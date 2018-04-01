@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <beans profile="gmail">
+        <context:property-placeholder location="classpath:sendgrid.properties" system-properties-mode="OVERRIDE" ignore-unresolvable="true"/>
+    </beans>
+    <beans profile="sendgrid">
+        <context:property-placeholder location="classpath:sendgrid.properties" system-properties-mode="OVERRIDE" ignore-unresolvable="true"/>
+    </beans>
+    <beans profile="gmail,sendgrid">
+        <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
+              p:host="${mail.host}"
+              p:port="${mail.port}"
+              p:username="${mail.username}"
+              p:password="${mail.password}">
+            <property name="javaMailProperties">
+                <map>
+                    <entry key="mail.from" value="${mail.username}"/>
+                    <entry key="mail.smtp.from" value="${mail.username}"/>
+                    <entry key="mail.transport.protocol" value="${mail.transport.protocol}"/>
+                    <entry key="mail.smtp.auth" value="${mail.smtp.auth}"/>
+                    <entry key="mail.smtp.starttls.enable" value="${mail.smtp.starttls.enable}"/>
+                    <entry key="mail.debug" value="${mail.debug}"/>
+                </map>
+            </property>
+        </bean>
+        <context:component-scan base-package="ru.javawebinar.**.mail"/>
+    </beans>
+</beans>

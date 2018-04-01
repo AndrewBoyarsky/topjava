@@ -12,10 +12,12 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
     private static final long serialVersionUID = 1L;
 
     private UserTo userTo;
+    private boolean isEmailConfirmed;
 
     public AuthorizedUser(User user) {
         super(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, user.getRoles());
         this.userTo = UserUtil.asTo(user);
+        isEmailConfirmed = user.isEmailConfirmed();
     }
 
     public static AuthorizedUser safeGet() {
@@ -39,6 +41,11 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
 
     public static int id() {
         return get().userTo.getId();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return super.isEnabled() && isEmailConfirmed;
     }
 
     public static int getCaloriesPerDay() {

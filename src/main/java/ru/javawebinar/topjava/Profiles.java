@@ -14,9 +14,15 @@ public class Profiles {
             DATAJPA = "datajpa";
 
     public static final String REPOSITORY_IMPLEMENTATION = DATAJPA;
+    public static final String
+            GMAIL = "gmail",
+            SENDGRID = "sendgrid";
+    public static final String EMAIL_IMPLEMENTATION = SENDGRID;
 
+    public Profiles() {
+    }
 
-//  Get DB profile depending of DB driver in classpath
+    //  Get DB profile depending of DB driver in classpath
     public static String getActiveDbProfile() {
         try {
             Class.forName("org.postgresql.Driver");

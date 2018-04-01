@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.UserTestData;
@@ -19,6 +20,8 @@ import static ru.javawebinar.topjava.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.UserTestData.USER;
 
 @ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/mock.xml"})
+//todo fix profiles
+@ActiveProfiles("gmail")
 @RunWith(SpringRunner.class)
 public class InMemoryAdminRestControllerSpringTest {
 

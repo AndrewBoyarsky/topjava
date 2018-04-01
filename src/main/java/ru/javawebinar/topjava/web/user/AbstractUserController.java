@@ -29,7 +29,7 @@ public abstract class AbstractUserController {
     public static final String EXCEPTION_DUPLICATE_EMAIL = "exception.user.duplicateEmail";
     public static final String EXCEPTION_MODIFICATION_RESTRICTION = "exception.user.modificationRestriction";
 
-    private final UserService service;
+    protected final UserService service;
 
     @Autowired
     private ExceptionInfoHandler exceptionInfoHandler;
